@@ -1,9 +1,8 @@
-package org.example.WildberriesHandler;
+package org.bot.WildberriesHandler;
 
-import org.example.Entities.Order;
+import org.bot.Entities.Order;
 
 import java.io.IOException;
-import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

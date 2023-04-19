@@ -1,4 +1,4 @@
-package org.example.Entities;
+package org.bot.Entities;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static org.example.components.BotCommands.LIST_OF_COMMANDS;
+import static org.bot.components.BotCommands.LIST_OF_COMMANDS;
 
 public class TelegramBot extends TelegramLongPollingBot {
 

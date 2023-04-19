@@ -1,4 +1,4 @@
-package org.example.WildberriesHandler;
+package org.bot.WildberriesHandler;
 
 import java.io.IOException;
 import java.net.URI;

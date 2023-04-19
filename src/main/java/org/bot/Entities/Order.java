@@ -1,4 +1,4 @@
-package org.example.Entities;
+package org.bot.Entities;
 
 public class Order {
     String Article;

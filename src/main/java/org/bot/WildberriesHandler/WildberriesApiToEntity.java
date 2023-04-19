@@ -1,6 +1,6 @@
-package org.example.WildberriesHandler;
+package org.bot.WildberriesHandler;
 
-import org.example.Entities.Order;
+import org.bot.Entities.Order;
 import org.json.JSONArray;
 import org.json.JSONException;
 
