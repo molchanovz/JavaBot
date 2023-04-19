@@ -8,9 +8,14 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import java.io.IOException;
 
+
+
 public class Main {
+
+    static String token = Protection.token;
+
     public static void main(String[] args) throws TelegramApiException {
-        TelegramBot bot = new TelegramBot("6032861857:AAHKRKNdkCIX21wAvqAuGFktxJCPmGLKJoI");
+        TelegramBot bot = new TelegramBot(token);
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(bot);
@@ -21,46 +26,48 @@ public class Main {
         myThread.start();
 
     }
-}
 
-class WB_ALL implements Runnable {
-    @Override
-    public void run() {
-        while (true) {
-            TelegramBot bot = new TelegramBot("6032861857:AAHKRKNdkCIX21wAvqAuGFktxJCPmGLKJoI");
-            String message;
-            try {
-                message = WildberriesApiToMessage.getOrders_All();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            bot.sendMessage("406363099", message);
-            try {
-                Thread.sleep(10 * 1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+    static class WB_ALL implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                TelegramBot bot = new TelegramBot(token);
+                String message;
+                try {
+                    message = WildberriesApiToMessage.getOrders_All();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                bot.sendMessage("406363099", message);
+                try {
+                    Thread.sleep(10 * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
-}
 
-class WB_FBS implements Runnable {
-    @Override
-    public void run() {
-        while (true) {
-            TelegramBot bot = new TelegramBot("6032861857:AAHKRKNdkCIX21wAvqAuGFktxJCPmGLKJoI");
-            String message;
-            try {
-                message = WildberriesApiToMessage.getOrders_All();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            bot.sendMessage("406363099", message);
-            try {
-                Thread.sleep(10 * 1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+    class WB_FBS implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                TelegramBot bot = new TelegramBot(token);
+                String message;
+                try {
+                    message = WildberriesApiToMessage.getOrders_All();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                bot.sendMessage("406363099", message);
+                try {
+                    Thread.sleep(10 * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
+
 }
+
