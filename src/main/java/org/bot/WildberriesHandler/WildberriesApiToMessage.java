@@ -9,7 +9,9 @@ import java.util.Map;
 
 public class WildberriesApiToMessage {
     public static String getOrders_All() throws IOException {
+        /** получаем массив заказов **/
         List<Order> orderList = WildberriesApiToEntity.getOrders_All();
+        /** считаем количество уникальных артикулов в заказах **/
         HashMap<String, Integer> uniqElements = new HashMap<>();
         double price = 0;
         for (Order el : orderList) {
@@ -18,14 +20,18 @@ public class WildberriesApiToMessage {
                 uniqElements.put(el.getArticle(), uniqElements.get(el.getArticle()) + 1);
             } else uniqElements.put(el.getArticle(), 1);
         }
-        String message = "Новый заказ на вб:\n\n";
-        for (Map.Entry entry : uniqElements.entrySet()) {
-            message += "• " + entry + "шт\n\n";
-        }
+        /** генерируем сообщения для отправки **/
+        if(orderList.size()>0){
+            String message = "Новый заказ на вб:\n\n";
+            for (Map.Entry entry : uniqElements.entrySet()) {
+                message += "• " + entry + "шт\n\n";
+            }
+            String resultPrice = String.format("%.2f",price);
+            message+="Всего: "+resultPrice+"₽";
+            return message;
+        }else
+            return "";
 
-        String resultPrice = String.format("%.2f",price);
 
-        message+="Всего: "+resultPrice+"₽";
-        return message;
     }
 }

@@ -30,7 +30,7 @@ class WildberriesApi {
     //Возвращает массив json объектов
     static JSONArray getOrders_All() throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        String dateFrom = getDate(-35);
+        String dateFrom = getDate(-72);
         System.out.println(dateFrom);
         try {
 
@@ -60,7 +60,8 @@ class WildberriesApi {
                 String result = EntityUtils.toString(entity);
 
                 //JSONObject object = new JSONObject(result);
-                JSONArray arr = new JSONArray(result);
+                JSONArray arr;
+                arr = new JSONArray(result);
                 return arr;
 
             } catch (Exception e) {
