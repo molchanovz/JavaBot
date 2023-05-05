@@ -1,11 +1,11 @@
-package org.bot;
-
 import org.bot.Entities.TelegramBot;
+import org.bot.Protection;
 import org.bot.WildberriesHandler.WildberriesApiToMessage;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -22,12 +22,38 @@ public class Main {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(bot);
+            bot.sendMessage("406363099", "Бот запущен");
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
+
+        File fileFBO = new File(Protection.fileFBO);
+        if(!fileFBO.isFile()){
+            try {
+                fileFBO.createNewFile();
+            } catch (IOException e) {
+                new RuntimeException(e);
+            }
+        }
+
+        File fileFBS = new File(Protection.fileFBS);
+        if(!fileFBS.isFile()){
+            try {
+                fileFBS.createNewFile();
+            } catch (IOException e) {
+                new RuntimeException(e);
+            }
+        }
+
+
+
+
         /** поток для фбо заказов **/
-        Thread myThread = new Thread(new WB_ALL(), "#1");
-        myThread.start();
+        Thread fbo_Thread = new Thread(new WB_ALL(), "#1");
+        fbo_Thread.start();
+
+        Thread fbs_Thread = new Thread(new WB_FBS(), "#2");
+        fbs_Thread.start();
 
     }
 
@@ -42,7 +68,7 @@ public class Main {
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 } catch (RuntimeException e) {
-                    bot.sendMessage("406363099", "Runtime Exception");
+                    bot.sendMessage("406363099", e.getMessage());
                     run();
                 }
                 if (message != "") {
@@ -57,20 +83,22 @@ public class Main {
         }
     }
 
-    class WB_FBS implements Runnable {
+    static class WB_FBS implements Runnable {
         @Override
         public void run() {
             while (true) {
                 TelegramBot bot = new TelegramBot(token);
                 String message;
                 try {
-                    message = WildberriesApiToMessage.getOrders_All();
+                    message = WildberriesApiToMessage.getOrders_FBS();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                bot.sendMessage("406363099", message);
+                if (message != "") {
+                    bot.sendMessage("406363099", message);
+                } else System.out.println("Новых FBS заказов нет");
                 try {
-                    Thread.sleep(10 * 1000);
+                    Thread.sleep(30 * 60 * 1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

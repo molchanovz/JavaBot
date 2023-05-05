@@ -30,7 +30,7 @@ class WildberriesApi {
     //Возвращает массив json объектов
     static JSONArray getOrders_All() throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        String dateFrom = getDate(-72);
+        String dateFrom = getDate(0);
         System.out.println(dateFrom);
         try {
 
@@ -77,7 +77,7 @@ class WildberriesApi {
         }
     }
 
-    JSONArray getOrders_FBS() throws IOException {
+    static JSONArray getOrders_FBS() throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         try {
 
@@ -104,6 +104,51 @@ class WildberriesApi {
                 // закрываем соединения
                 response.close();
             }
+        } finally {
+            httpClient.close();
+        }
+    }
+
+    static JSONArray getStocks() throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String dateFrom = formatterDate.format(date);
+        try {
+
+            // создаем объект клиента
+            HttpGet request = new HttpGet("https://statistics-api.wildberries.ru/api/v1/supplier/stocks");
+
+            URI uri = new URIBuilder(request.getURI())
+                    .addParameter("dateFrom", dateFrom)
+                    .build();
+            request.setURI(uri);
+
+            // добавляем заголовки запроса
+            request.setHeader("Authorization", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NJRCI6IjIwZWJiYWM3LWI4MmQtNGExYS04YzdlLWU3NmE5ZmRhNDJiNiJ9.v4t6dDDC_h1sjX02p-0kSaTgAfEc0WHPokPz_QxgElY");
+            request.addHeader("dateFrom", dateFrom);
+            //System.out.println(Arrays.stream(request.getAllHeaders()).toList().toString());
+            CloseableHttpResponse response = httpClient.execute(request);
+
+            try {
+
+                // получаем статус ответа
+                System.out.println(response.getStatusLine().toString());        // HTTP/1.1 200 OK
+                HttpEntity entity = response.getEntity();
+                String result = EntityUtils.toString(entity);
+                //JSONObject object = new JSONObject(result);
+                JSONArray arr;
+                arr = new JSONArray(result);
+                return arr;
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                // закрываем соединения
+                response.close();
+            }
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         } finally {
             httpClient.close();
         }
