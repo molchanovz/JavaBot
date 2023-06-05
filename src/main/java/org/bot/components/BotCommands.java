@@ -8,6 +8,7 @@ public interface BotCommands {
     List<BotCommand> LIST_OF_COMMANDS = List.of(
             new BotCommand("/start", "start bot"),
             new BotCommand("/shtrihkod", "Штрихкод Ozon FBS"),
+            new BotCommand("/stocks", "Остатки"),
             new BotCommand("/help", "bot info")
     );
 

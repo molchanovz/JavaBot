@@ -1,6 +1,7 @@
 package org.bot.WildberriesHandler;
 
 import org.bot.Entities.Order;
+import org.bot.Entities.Stock;
 import org.bot.Protection;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -121,22 +122,23 @@ public class WildberriesApiToEntity {
         return orderList;
     }
 
-    public static String getStocks() throws IOException {
+    public static List<Stock> getStocks() throws IOException {
         JSONArray jsonArray = WildberriesApi.getStocks();
-        List<String> arr = new ArrayList<>();
+        List<Stock> arr = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             String name;
-            String count;
+            int count;
             String warehouseName;
             try {
                 name = jsonArray.getJSONObject(i).getString("supplierArticle");
-                count = jsonArray.getJSONObject(i).getString("quantity");
+                count = Integer.parseInt(jsonArray.getJSONObject(i).getString("quantity"));
                 warehouseName = jsonArray.getJSONObject(i).getString("warehouseName");
-                System.out.println(name+"  "+count+" "+warehouseName);
+                Stock stock = new Stock(name,count,warehouseName);
+                arr.add(stock);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
         }
-        return "Конец";
+        return arr;
     }
 }

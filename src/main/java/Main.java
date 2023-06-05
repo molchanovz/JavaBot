@@ -52,6 +52,7 @@ public class Main {
         Thread fbo_Thread = new Thread(new WB_ALL(), "#1");
         fbo_Thread.start();
 
+        /** поток для фбc заказов **/
         Thread fbs_Thread = new Thread(new WB_FBS(), "#2");
         fbs_Thread.start();
 
