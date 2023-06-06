@@ -15,9 +15,8 @@ import java.util.Scanner;
 
 public class WildberriesApiToEntity {
 
-
-    static List<Order> getOrders_All() throws IOException {
-        JSONArray jsonArray = WildberriesApi.getOrders_All();
+    static List<Order> getOrders_All(String date) throws IOException {
+        JSONArray jsonArray = WildberriesApi.getOrders_All(date);
         List<Order> orderFBSList = WildberriesApiToEntity.getOrders_FBS();
         List<Order> orderList = new ArrayList<>();
 
@@ -140,5 +139,26 @@ public class WildberriesApiToEntity {
             }
         }
         return arr;
+    }
+
+    static List<Order> getLastDayOrders(String date) throws IOException {
+        JSONArray jsonArray = WildberriesApi.getOrders_All(date);
+        List<Order> orderList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            String article;
+            double price;
+            try {
+                article = jsonArray.getJSONObject(i).getString("supplierArticle");
+                double totalPrice = jsonArray.getJSONObject(i).getDouble("totalPrice");
+                int discountPercent = jsonArray.getJSONObject(i).getInt("discountPercent");
+                price = totalPrice * (1 - discountPercent / 100.0);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            Order order = new Order(article, price);
+            orderList.add(order);
+        }
+        return orderList;
     }
 }

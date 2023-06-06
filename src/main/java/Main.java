@@ -7,6 +7,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class Main {
@@ -56,6 +58,10 @@ public class Main {
         Thread fbs_Thread = new Thread(new WB_FBS(), "#2");
         fbs_Thread.start();
 
+        /** поток для lastDays заказов **/
+        Thread lastDay_Thread = new Thread(new WB_lastOrders(), "#3");
+        lastDay_Thread.start();
+
     }
 
     static class WB_ALL implements Runnable {
@@ -103,6 +109,28 @@ public class Main {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        }
+    }
+
+    static class WB_lastOrders implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                SimpleDateFormat formatterTime = new SimpleDateFormat("HH:mm");
+                Date date = new Date();
+                String message = formatterTime.format(date);
+                if ((message != "")&&(message.equals("00:00"))) {
+                    TelegramBot bot = new TelegramBot(token);
+                    bot.sendMessage("406363099", "Вчерашние заказы");
+                    bot.sendFile("406363099",Protection.lastOrdersWB);
+                    try {
+                        Thread.sleep(20 * 360 * 1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
             }
         }
     }
